@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      topologySpreadConstraints:
+        - labelSelector:
+            matchLabels:
+              app: frontend
+          maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+      containers:
+      - name: frontend
+        image: ghcr.io/dergeberl/multitool-net
+        command: ["/bin/sh"]
+        args: 
+          - -c
+          - "set -e; echo 'Waiting 30 seconds to start up....' && sleep 10 && socat - TCP-LISTEN:8080,fork,reuseaddr"
+        startupProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 1
+          failureThreshold: 5
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 1
+          periodSeconds: 1
+          failureThreshold: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 1
+          periodSeconds: 1
+          failureThreshold: 5
+        resources:
+          requests:
+            cpu: 150m
+            memory: 96Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi

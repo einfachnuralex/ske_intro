@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-hello
+spec:
+  selector:
+    matchLabels:
+      app: nginx-hello
+  template:
+    metadata:
+      labels:
+        app: nginx-hello
+    spec:
+      containers:
+      - name: nginx-hello
+        image: nginxdemos/nginx-hello:0.3
+        resources:
+          requests:
+            cpu: 150m
+            memory: 96Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi

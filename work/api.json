@@ -1,0 +1,26 @@
+{
+    "kubernetes": {
+        "version": "1.28.9"
+    },
+    "nodepools": [
+        {
+            "availabilityZones": [
+                "eu01-1"
+            ],
+            "machine": {
+                "image": {
+                    "name": "flatcar",
+                    "version": "3815.2.1"
+                },
+                "type": "c1.3"
+            },
+            "maximum": 3,
+            "minimum": 2,
+            "name": "pool",
+            "volume": {
+                "size": 20,
+                "type": "storage_premium_perf2"
+            }
+        }
+    ]
+}
